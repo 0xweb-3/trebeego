@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	// 路由的关联
 	_ "trybeego/routers"
 
 	"github.com/beego/beego/v2/client/orm"

@@ -7,7 +7,8 @@ import (
 )
 
 func init() {
-	//beego.Router("/", &controllers.MainController{})
+	// 注册路由注解
+	beego.Include(&controllers.AnnotationController{})
 
 	// user
 	beego.Router("/users", &controllers.UserController{}, "get:GetAll;post:Create")
