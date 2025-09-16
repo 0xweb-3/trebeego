@@ -34,3 +34,8 @@ go run main.go
 - `models/`：放数据模型
 - `routers/`：路由定义
 - `conf/app.conf`：配置文件（端口、数据库等）
+
+## 数据库验证
+```shell
+docker exec -it beego-mysql mysql -u beego -pbeego123
+```

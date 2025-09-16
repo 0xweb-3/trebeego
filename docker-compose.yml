@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: beego-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: beego_demo
+      MYSQL_USER: beego
+      MYSQL_PASSWORD: beego123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
