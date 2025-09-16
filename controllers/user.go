@@ -45,12 +45,7 @@ func (c *UserController) GetOne() {
 func (c *UserController) Create() {
 	//c.Ctx.Input.RequestBody 在 Beego 2.x 有时会返回空，尤其是在请求体已经被读取过的情况下。
 	//使用 io.ReadAll(c.Ctx.Request.Body) 可以直接从 HTTP 请求里读取完整原始 body，保证 json.Unmarshal 可以正常解析。
-	body, err := io.ReadAll(c.Ctx.Request.Body)
-	if err != nil {
-		logs.Error("Read body error: ", err)
-		c.CustomAbort(400, "Cannot read request body")
-		return
-	}
+	body := c.Ctx.Input.RequestBody
 	logs.Info("Request body raw: %s", string(body))
 	logs.Info("Request Method: %s", c.Ctx.Request.Method)
 	logs.Info("Request Header: %+v", c.Ctx.Request.Header)
@@ -61,7 +56,7 @@ func (c *UserController) Create() {
 		c.CustomAbort(400, "Invalid input")
 	}
 	o := orm.NewOrm()
-	_, err = o.Insert(&user)
+	_, err := o.Insert(&user)
 	if err != nil {
 		c.CustomAbort(500, err.Error())
 	}
