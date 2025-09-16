@@ -9,6 +9,7 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/validation"
 	beego "github.com/beego/beego/v2/server/web"
+	"github.com/go-playground/validator/v10"
 )
 
 type UserController struct {
@@ -86,19 +87,40 @@ func (c *UserController) Create() {
 	c.ServeJSON()
 }
 
+type UserValidator struct {
+	Name  string `json:"name" validate:"required,max=20"`
+	Email string `json:"email" validate:"required,email"`
+}
+
+var validate = validator.New()
+
 func (c *UserController) Update() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 
-	var user models.User
+	var user UserValidator
 	body, err := io.ReadAll(c.Ctx.Request.Body)
 	if err := json.Unmarshal(body, &user); err != nil {
 		c.CustomAbort(400, "Invalid input")
 	}
-	user.ID = id
+
+	if err := validate.Struct(user); err != nil {
+		errs := map[string]string{}
+		for _, e := range err.(validator.ValidationErrors) {
+			errs[e.Field()] = e.Error()
+		}
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = map[string]interface{}{"error": errs}
+		c.ServeJSON()
+		return
+	}
 
 	o := orm.NewOrm()
-	_, err = o.Update(&user)
+	_, err = o.Update(&models.User{
+		ID:    id,
+		Name:  user.Name,
+		Email: user.Email,
+	})
 	if err != nil {
 		c.CustomAbort(500, err.Error())
 	}

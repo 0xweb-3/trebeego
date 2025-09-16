@@ -59,5 +59,5 @@ docker exec -it beego-mysql mysql -u beego -pbeego123
 * v3.0.0 控制器 (Controllers) 参考笔记
 * v4.0.0 参数校验
   * v4.0.1 使用 Beego 内置 Validator
-  * 使用第三方库 `go-playground/validator`
+  * v4.0.2 使用第三方库 `go-playground/validator`
 * 
