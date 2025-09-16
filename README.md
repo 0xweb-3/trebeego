@@ -50,7 +50,7 @@ docker exec -it beego-mysql mysql -u beego -pbeego123
 
 
 ## 版本说明
-* v1.0.0 连接mysql数据库并，实现一个简单api接
+* v1.0.0 连接mysql数据库并，实现一个简单api接口
 * v2.0.0 路由管理
   * v2.0.1 自动路由实现
   * v2.0.2 注解路由
@@ -60,4 +60,6 @@ docker exec -it beego-mysql mysql -u beego -pbeego123
 * v4.0.0 参数校验
   * v4.0.1 使用 Beego 内置 Validator
   * v4.0.2 使用第三方库 `go-playground/validator`
+* v5.0.0 模型使用
+* v6.0.0 模型 (Models) 已经在简单api接口 中实现
 * 
