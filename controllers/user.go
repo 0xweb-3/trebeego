@@ -7,12 +7,17 @@ import (
 	"trybeego/models"
 
 	"github.com/beego/beego/v2/client/orm"
-	"github.com/beego/beego/v2/core/logs"
+	"github.com/beego/beego/v2/core/validation"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
 type UserController struct {
 	beego.Controller
+}
+
+type User struct {
+	Name  string `json:"name"`  // 用户名，必填
+	Email string `json:"email"` // 邮箱，必填
 }
 
 func (c *UserController) GetAll() {
@@ -43,20 +48,37 @@ func (c *UserController) GetOne() {
 }
 
 func (c *UserController) Create() {
-	//c.Ctx.Input.RequestBody 在 Beego 2.x 有时会返回空，尤其是在请求体已经被读取过的情况下。
-	//使用 io.ReadAll(c.Ctx.Request.Body) 可以直接从 HTTP 请求里读取完整原始 body，保证 json.Unmarshal 可以正常解析。
-	body := c.Ctx.Input.RequestBody
-	logs.Info("Request body raw: %s", string(body))
-	logs.Info("Request Method: %s", c.Ctx.Request.Method)
-	logs.Info("Request Header: %+v", c.Ctx.Request.Header)
+	var user User
 
-	var user models.User
+	body := c.Ctx.Input.RequestBody
 	if err := json.Unmarshal(body, &user); err != nil {
-		logs.Error("RunSyncdb error: ", err)
 		c.CustomAbort(400, "Invalid input")
 	}
+
+	// 校验字段
+	valid := validation.Validation{}
+	valid.Required(user.Name, "name")
+	valid.MaxSize(user.Name, 20, "name")
+	valid.Required(user.Email, "email")
+	valid.Email(user.Email, "email")
+
+	if valid.HasErrors() {
+		// 遍历错误并返回
+		errs := map[string]string{}
+		for _, err := range valid.Errors {
+			errs[err.Key] = err.Message
+		}
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = map[string]interface{}{"error": errs}
+		c.ServeJSON()
+		return
+	}
+
 	o := orm.NewOrm()
-	_, err := o.Insert(&user)
+	_, err := o.Insert(&models.User{
+		Name:  user.Name,
+		Email: user.Email,
+	})
 	if err != nil {
 		c.CustomAbort(500, err.Error())
 	}
