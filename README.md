@@ -55,4 +55,5 @@ docker exec -it beego-mysql mysql -u beego -pbeego123
   * v2.0.1 自动路由实现
   * v2.0.2 注解路由
   * v2.0.3 RESTful风格路由
+  * v2.0.3 实现跨域中间件的使用
 * 
