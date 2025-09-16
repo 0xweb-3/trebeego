@@ -16,4 +16,8 @@ func init() {
 
 	// 自动路由模式
 	beego.AutoRouter(&controllers.AutoController{})
+
+	// RESTful风格路由
+	beego.Router("/rest", &controllers.RestController{})
+
 }
