@@ -39,3 +39,20 @@ go run main.go
 ```shell
 docker exec -it beego-mysql mysql -u beego -pbeego123
 ```
+
+## 路由
+* 固定路由
+* 动态路由（带参数）
+* 正则路由
+* 自动路由
+* 注解路由
+* RESTful 风格支持
+
+
+## 版本说明
+* v1.0.0 连接mysql数据库并，实现一个简单api接
+* v2.0.0 路由管理
+  * v2.0.1 自动路由实现
+  * v2.0.2 注解路由
+  * v3.0.3 RESTful风格路由
+* 
