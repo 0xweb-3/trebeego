@@ -1,9 +1,14 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"strconv"
+	"time"
+
+	"trybeego/cache"
 	"trybeego/models"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -34,9 +39,12 @@ func (c *UserController) GetAll() {
 }
 
 func (c *UserController) GetOne() {
+	redisCache := cache.GetRedisClient()
+
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 
+	userChahceKey := fmt.Sprintf("beego:%d", id)
 	o := orm.NewOrm()
 	user := models.User{ID: id}
 	err := o.Read(&user)
@@ -45,6 +53,9 @@ func (c *UserController) GetOne() {
 		c.CustomAbort(404, "User not found")
 	}
 	c.Data["json"] = user
+
+	// 设置值
+	redisCache.Set(context.Background(), userChahceKey, user.Name, time.Minute*3)
 	c.ServeJSON()
 }
 
