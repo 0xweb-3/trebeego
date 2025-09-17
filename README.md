@@ -48,6 +48,27 @@ docker exec -it beego-mysql mysql -u beego -pbeego123
 * 注解路由
 * RESTful 风格支持
 
+## 日志系统
+Beego 内置 logs 包，提供一套功能完善的日志系统。
+支持多种日志输出方式：
+* 控制台（console） 
+* 文件（file） 
+* 多文件按级别输出（multi-file） 
+* 网络（syslog、Kafka 等）
+
+
+** 支持日志级别
+* `Emergency` (0) 严重错误
+* `Alert` (1)
+* `Critical` (2)
+* `Error` (3)
+* `Warning` (4)
+* `Notice` (5)
+* `Informational` (6)
+* `Debug` (7)
+
+默认日志级别是 Debug，会输出所有日志。
+
 
 ## 版本说明
 * ✅v1.0.0 连接mysql数据库并，实现一个简单api接口
@@ -62,7 +83,7 @@ docker exec -it beego-mysql mysql -u beego -pbeego123
   * ✅v4.0.2 使用第三方库 `go-playground/validator`
 * ✅v5.0.0 模型使用
 * ✅v6.0.0 模型 (Models) 已经在简单api接口 中实现
-* v7.0.0 redis缓存 
+* ✅v7.0.0 redis缓存 
 * 日志系统
 * 中间件与过滤器
 * 最佳实践
